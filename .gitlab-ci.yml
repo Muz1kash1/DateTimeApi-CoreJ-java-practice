@@ -1,0 +1,50 @@
+image: maven:3.8.6-openjdk-18-slim
+variables:
+  MAVEN_SETTINGS: ".mvn/settings.xml"
+
+
+cache:
+  paths:
+    - ./.mvn
+  key: "$CI_BUILD_REF_NAME"
+
+stages:
+  - build
+  - test
+  - package
+
+build:
+  stage: build
+  #  only:
+  #    - master
+  #    - merge_requests
+  #  except:
+  #    - tags
+  script:
+    - "mvn --settings $MAVEN_SETTINGS compile"
+  allow_failure: false
+
+test:
+  stage: test
+  #  only:
+  #    - master
+  #    - merge_requests
+  #  except:
+  #    - tags
+  script:
+    - "mvn --settings $MAVEN_SETTINGS test -P !checkstyle"
+  allow_failure: false
+
+package:
+  stage: package
+  #  only:
+  #    - master
+  #    - merge_requests
+  #    - tags
+  script:
+    - "mvn package --settings $MAVEN_SETTINGS -DskipTests -P !checkstyle"
+  artifacts:
+    paths:
+      - "target/*.jar"
+    expire_in: 1 week
+  allow_failure: false
