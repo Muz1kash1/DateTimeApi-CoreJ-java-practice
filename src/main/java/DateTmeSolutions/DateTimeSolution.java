@@ -62,21 +62,7 @@ public class DateTimeSolution {
       LocalDateTime endDate,
       double workTimePerDay,
       List<DayOfWeek> weekends) {
-    if (endDate.getYear() < startDate.getYear()
-        || (endDate.getYear() == startDate.getYear()
-            && endDate.getDayOfYear() < startDate.getDayOfYear())
-        || ((endDate.getYear() == startDate.getYear()
-            && endDate.getDayOfYear() == startDate.getDayOfYear()
-            && endDate.getHour() < startDate.getHour()))
-        || ((endDate.getYear() == startDate.getYear())
-            && (endDate.getDayOfYear() == startDate.getDayOfYear())
-            && (endDate.getHour() == startDate.getHour())
-            && (endDate.getMinute() < startDate.getMinute()))
-        || ((endDate.getYear() == startDate.getYear())
-            && (endDate.getDayOfYear() == startDate.getDayOfYear())
-            && (endDate.getHour() == startDate.getHour())
-            && (endDate.getMinute() == startDate.getMinute())
-            && (endDate.getSecond() < startDate.getSecond()))) {
+    if (endDate.isBefore(startDate)) {
       throw new WrongInputException("start date bigger then end");
     }
     LocalDateTime dateEncount = startDate;
